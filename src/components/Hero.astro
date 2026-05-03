@@ -1,0 +1,102 @@
+---
+---
+
+<header class="hero">
+  <svg
+    class="hero-sigil"
+    viewBox="0 0 600 600"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <defs>
+      <pattern
+        id="sigilHatch"
+        patternUnits="userSpaceOnUse"
+        width="4"
+        height="4"
+        patternTransform="rotate(45)"
+      >
+        <line x1="0" y1="0" x2="0" y2="4" stroke="#14110d" stroke-width="0.6"></line>
+      </pattern>
+    </defs>
+    <g fill="none" stroke="#14110d" stroke-width="1.2">
+      <circle cx="300" cy="300" r="290"></circle>
+      <circle cx="300" cy="300" r="260"></circle>
+      <circle cx="300" cy="300" r="180"></circle>
+      <circle cx="300" cy="300" r="110"></circle>
+    </g>
+    <circle cx="300" cy="300" r="60" fill="url(#sigilHatch)"></circle>
+    <g stroke="#14110d" stroke-width="1.2">
+      <line x1="300" y1="10" x2="300" y2="60"></line>
+      <line x1="300" y1="540" x2="300" y2="590"></line>
+      <line x1="10" y1="300" x2="60" y2="300"></line>
+      <line x1="540" y1="300" x2="590" y2="300"></line>
+    </g>
+    <g fill="#b8341c">
+      <circle cx="300" cy="300" r="8"></circle>
+    </g>
+    <text
+      x="300"
+      y="230"
+      text-anchor="middle"
+      font-family="Newsreader, serif"
+      font-style="italic"
+      font-size="18"
+      fill="#14110d">sightless</text>
+    <text
+      x="300"
+      y="380"
+      text-anchor="middle"
+      font-family="JetBrains Mono, monospace"
+      font-size="11"
+      letter-spacing="4"
+      fill="#14110d">v0.1 · DRAFT</text>
+  </svg>
+
+  <div class="container">
+    <div class="hero-meta">
+      <span>Sightless Protocol — Specification</span>
+      <span class="rule"></span>
+      <span>An open standard · Apache 2.0 · Pre-audit</span>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <h1>
+          Compute<br />
+          <span class="italic">without</span> seeing.<br />
+          <span class="small">Prove it. Verifiably. Offline. Forever.</span>
+        </h1>
+
+        <p class="hero-tagline">
+          Sightless is the open protocol for <em>verifiable private compute</em>
+          — backend-agnostic across FHE, TEE, MPC and ZK, with portable
+          cryptographic Receipts any third party can validate.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#abstract">
+            Read the spec
+            <span class="btn-arrow">→</span>
+          </a>
+          <a class="btn" href="https://github.com/">
+            crates/ source
+          </a>
+        </div>
+      </div>
+
+      <aside class="hero-aside">
+        <dl>
+          <dt>Author</dt><dd>Pierre Malherbe</dd>
+          <dt>Version</dt><dd>v0.1 (DRAFT)</dd>
+          <dt>Status</dt><dd>Experimental research</dd>
+          <dt>License</dt><dd>Apache 2.0</dd>
+          <dt>Audit</dt><dd>Pre-audit</dd>
+          <dt>Backend</dt><dd>TFHE / tfhe-rs</dd>
+          <dt>Envelope</dt><dd>Ed25519 · JCS · SHA-256</dd>
+          <dt>Reference</dt><dd>Rust, crates/</dd>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</header>

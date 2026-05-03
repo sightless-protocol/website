@@ -1,0 +1,131 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = "Sightless Protocol — Verifiable Private Compute",
+  description = "Open standard for verifiable private compute. FHE-first, backend-agnostic across TEE, MPC, and ZK. Portable, signed Receipts any third party can validate offline. Pre-stable research draft v0.1.",
+  image = "/og.png",
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(image, Astro.site).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": canonical + "#article",
+      headline: title,
+      description,
+      author: {
+        "@type": "Person",
+        name: "Pierre Malherbe",
+      },
+      inLanguage: "en",
+      isAccessibleForFree: true,
+      license: "https://www.apache.org/licenses/LICENSE-2.0",
+      url: canonical,
+      image: ogImage,
+      keywords:
+        "verifiable private compute, fully homomorphic encryption, FHE, TFHE, TEE, MPC, zero-knowledge proofs, Ed25519, JCS, cryptographic receipts, privacy-preserving AI, confidential computing, open protocol",
+    },
+    {
+      "@type": "Organization",
+      "@id": Astro.site + "#org",
+      name: "Sightless Protocol",
+      url: Astro.site?.toString(),
+      logo: ogImage,
+    },
+    {
+      "@type": "WebSite",
+      "@id": Astro.site + "#website",
+      url: Astro.site?.toString(),
+      name: "Sightless Protocol",
+      description,
+      publisher: { "@id": Astro.site + "#org" },
+      inLanguage: "en",
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f4f1ea" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
+
+    <meta name="author" content="Pierre Malherbe" />
+    <meta name="keywords" content="verifiable private compute, FHE, TFHE, fully homomorphic encryption, TEE, MPC, zero-knowledge, Ed25519, JCS, cryptographic receipts, confidential computing, privacy preserving AI, sightless protocol" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sightless Protocol" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sightless Protocol — Verifiable Private Compute" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Sightless Protocol — Verifiable Private Compute" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <slot />
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document
+        .querySelectorAll("section, .hero-grid, .receipt-frame")
+        .forEach((el) => {
+          el.classList.add("reveal");
+          io.observe(el);
+        });
+    </script>
+  </body>
+</html>

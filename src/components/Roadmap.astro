@@ -1,0 +1,75 @@
+---
+const phases = [
+  {
+    label: "Now",
+    version: "v0.1",
+    title: "Wire format & FHE backend",
+    status: "Draft",
+    statusClass: "draft",
+    desc: "Receipt envelope, validation rules, error taxonomy. TFHE via tfhe-rs. Ed25519 signatures over JCS-canonical bytes. Reference Rust implementation.",
+  },
+  {
+    label: "Phase 2",
+    version: "v0.2",
+    title: "Target-Operator binding & signature domain separation",
+    status: "Next",
+    statusClass: "next",
+    desc: "Backwards-incompatible fixes identified during pre-publication review. Closes cross-Operator replay (S13) and adds a domain prefix to signed bytes.",
+  },
+  {
+    label: "Phase 3",
+    version: "v0.3",
+    title: "Multi-backend support — TEE, MPC",
+    status: "Future",
+    statusClass: "future",
+    desc: "TEE attestation evidence (TDX, SEV-SNP, CCA, Secure Enclave) and MPC transcript binding, both as localized extensions of the same envelope.",
+  },
+  {
+    label: "Phase 4",
+    version: "v0.4",
+    title: "Zero-knowledge proofs of correct evaluation",
+    status: "Future",
+    statusClass: "future",
+    desc: "Cryptographic <em>prevention</em> of false Receipts, not merely accountability. ZK proof composed alongside the Ed25519 signature for soundness + non-repudiation.",
+  },
+  {
+    label: "",
+    version: "v1.0",
+    title: "Audit, freeze, IETF I-D",
+    status: "Future",
+    statusClass: "future",
+    desc: "Independent cryptographic audit, exhaustive test vectors, wire-format freeze with v1.x backwards-compatibility commitment, IETF Internet-Draft submission.",
+  },
+];
+---
+
+<section id="roadmap" class="roadmap">
+  <div class="container">
+    <div class="section-num"><span>§ 06 — Roadmap</span></div>
+    <h2>From <em>draft</em> to standard, in deliberate phases.</h2>
+
+    <p style="max-width: none;">
+      v0.1 is an open invitation to adversarial review. Each phase below is a
+      commitment of intent, not of timeline. The protocol's value stands on what
+      is delivered, not what is projected.
+    </p>
+
+    <ol class="roadmap-list">
+      {
+        phases.map((p) => (
+          <li>
+            <div class="phase-num">
+              {p.label}
+              {p.version && <strong>{p.version}</strong>}
+            </div>
+            <div>
+              <div class="phase-title">{p.title}</div>
+              <span class={`phase-status ${p.statusClass}`}>{p.status}</span>
+            </div>
+            <div class="phase-desc" set:html={p.desc} />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

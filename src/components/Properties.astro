@@ -1,0 +1,293 @@
+---
+const props = [
+  {
+    id: "P1 — confidentiality",
+    title: "Plaintext stays encrypted.",
+    body: `Input <code>x</code> and output <code>y</code> are not revealed to any network adversary or to an honest-but-curious Operator. Holds against passive and active wire attackers under TFHE security.`,
+  },
+  {
+    id: "P2 — accountability",
+    title: "The Operator cannot deny what it signed.",
+    body: `A valid Receipt cryptographically attributes the claimed <code>(function, input_hash, output_hash, policy)</code> tuple to the Operator's <code>pk_op</code>. Cryptographic prevention (ZK proofs) is targeted in Phase 4.`,
+  },
+  {
+    id: "P3 — non-repudiation",
+    title: "Signatures are forever.",
+    body: `No party — including the Operator — can credibly deny having produced the signature, absent compromise of <code>sk_op</code>. Verifiers acquire <code>pk_op</code> through a trusted out-of-band channel.`,
+  },
+  {
+    id: "P4 — replay resistance",
+    title: "Each request is one-shot.",
+    body: `A Receipt cannot be reused for a different <code>ComputeRequest</code>; a request cannot be replayed within the Operator's acceptance window. Enforced by 16-byte CSPRNG nonces and timestamp mirroring.`,
+  },
+  {
+    id: "P5 — portability",
+    title: "Verify offline. Anywhere. Forever.",
+    body: `Given only <code>(Receipt, pk_op)</code>, any Verifier can validate without contacting the Operator, at any time after issuance. A regulator in 2030 verifies a Receipt issued in 2026.`,
+  },
+  {
+    id: "P6 — backend-agnosticism",
+    title: "Same envelope, any primitive.",
+    body: `Signing and validation logic do not change when the backend changes. Future TEE, MPC, and ZK backends inherit P1–P5 by construction via localized extensions to the wire format.`,
+  },
+];
+---
+
+<section id="properties">
+  <div class="container">
+    <div class="section-num"><span>§ 05 — Security Properties</span></div>
+    <h2>What the protocol <em>actually</em> proves.</h2>
+
+    <p style="max-width: 60ch;">
+      v0.1 makes a deliberate split: <em>cryptographic prevention</em> for plaintext
+      confidentiality, <em>cryptographic accountability</em> for computation integrity.
+      Honest specs distinguish what they prove from what they make attributable.
+    </p>
+
+    <figure
+      class="figure"
+      data-label="Fig. 04 — The dual guarantee"
+      style="margin-top: 48px;"
+    >
+      <svg
+        viewBox="0 0 1100 320"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-labelledby="dualTitle"
+      >
+        <title id="dualTitle"
+          >Two halves of the v0.1 guarantee: prevention vs. accountability.</title
+        >
+        <defs>
+          <pattern
+            id="confHatch"
+            patternUnits="userSpaceOnUse"
+            width="6"
+            height="6"
+            patternTransform="rotate(45)"
+          >
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="6"
+              stroke="#b8341c"
+              stroke-width="0.7"
+              opacity="0.45"></line>
+          </pattern>
+          <pattern
+            id="accHatch"
+            patternUnits="userSpaceOnUse"
+            width="6"
+            height="6"
+            patternTransform="rotate(-45)"
+          >
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="6"
+              stroke="#8a6c2c"
+              stroke-width="0.7"
+              opacity="0.55"></line>
+          </pattern>
+        </defs>
+
+        <g>
+          <rect
+            x="20"
+            y="20"
+            width="510"
+            height="280"
+            fill="url(#confHatch)"
+            stroke="#b8341c"
+            stroke-width="1.2"></rect>
+          <rect x="20" y="20" width="510" height="36" fill="#b8341c"></rect>
+          <text
+            x="40"
+            y="44"
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#f4f1ea"
+            letter-spacing="2">P1 · CONFIDENTIALITY</text>
+          <text
+            x="510"
+            y="44"
+            text-anchor="end"
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#f4f1ea"
+            letter-spacing="2">CRYPTOGRAPHIC PREVENTION</text>
+
+          <text
+            x="40"
+            y="100"
+            font-family="Newsreader, serif"
+            font-style="italic"
+            font-size="32"
+            fill="#14110d">The Operator</text>
+          <text
+            x="40"
+            y="138"
+            font-family="Newsreader, serif"
+            font-style="italic"
+            font-size="32"
+            fill="#14110d">cannot see x.</text>
+
+          <text
+            x="40"
+            y="186"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">guarantee:  TFHE encryption of inputs</text>
+          <text
+            x="40"
+            y="206"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">defense:    cryptanalytic intractability</text>
+          <text
+            x="40"
+            y="226"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">recourse:   none required — broken means</text>
+          <text
+            x="40"
+            y="244"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">{`            128-bit security is broken`}</text>
+
+          <text
+            x="40"
+            y="280"
+            font-family="Newsreader, serif"
+            font-size="14"
+            font-style="italic"
+            fill="#b8341c">→ mathematical, not legal</text>
+        </g>
+
+        <g>
+          <line
+            x1="565"
+            y1="20"
+            x2="565"
+            y2="300"
+            stroke="#1a1712"
+            stroke-width="1"
+            stroke-dasharray="3 4"></line>
+          <circle
+            cx="565"
+            cy="160"
+            r="20"
+            fill="#f4f1ea"
+            stroke="#1a1712"
+            stroke-width="1.2"></circle>
+          <text
+            x="565"
+            y="160"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="Newsreader, serif"
+            font-style="italic"
+            font-size="16"
+            fill="#14110d">vs</text>
+        </g>
+
+        <g>
+          <rect
+            x="600"
+            y="20"
+            width="480"
+            height="280"
+            fill="url(#accHatch)"
+            stroke="#8a6c2c"
+            stroke-width="1.2"></rect>
+          <rect x="600" y="20" width="480" height="36" fill="#8a6c2c"></rect>
+          <text
+            x="620"
+            y="44"
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#f4f1ea"
+            letter-spacing="2">P2 · INTEGRITY</text>
+          <text
+            x="1060"
+            y="44"
+            text-anchor="end"
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#f4f1ea"
+            letter-spacing="2">ACCOUNTABILITY (V0.1)</text>
+
+          <text
+            x="620"
+            y="100"
+            font-family="Newsreader, serif"
+            font-style="italic"
+            font-size="32"
+            fill="#14110d">The Operator</text>
+          <text
+            x="620"
+            y="138"
+            font-family="Newsreader, serif"
+            font-style="italic"
+            font-size="32"
+            fill="#14110d">cannot deny.</text>
+
+          <text
+            x="620"
+            y="186"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">guarantee:  Ed25519 signature over JCS</text>
+          <text
+            x="620"
+            y="206"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">defense:    non-repudiable attestation</text>
+          <text
+            x="620"
+            y="226"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">recourse:   legal, contractual, reputational</text>
+          <text
+            x="620"
+            y="244"
+            font-family="JetBrains Mono, monospace"
+            font-size="12"
+            fill="#2a251d">{`            — ZK prevention in Phase 4`}</text>
+
+          <text
+            x="620"
+            y="280"
+            font-family="Newsreader, serif"
+            font-size="14"
+            font-style="italic"
+            fill="#8a6c2c">→ attribution, not prevention (today)</text>
+        </g>
+      </svg>
+      <div class="figure-caption">
+        Fig. 04 — <strong
+          >An honest spec distinguishes what it proves from what it merely makes
+          attributable.</strong
+        >
+      </div>
+    </figure>
+
+    <div class="props">
+      {
+        props.map((p) => (
+          <div class="prop">
+            <div class="prop-id">{p.id}</div>
+            <h3>{p.title}</h3>
+            <p set:html={p.body} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

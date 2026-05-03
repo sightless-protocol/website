@@ -1,0 +1,44 @@
+---
+---
+
+<section id="abstract">
+  <div class="container">
+    <div class="section-num"><span>§ 01 — Abstract</span></div>
+    <h2>What <em>it is</em>.</h2>
+
+    <div class="abstract-body">
+      <p>
+        Every cloud AI service in production today reads user data in
+        cleartext. Communication is encrypted in transit, storage is encrypted
+        at rest — but the operator running the model holds the keys and
+        processes the plaintext. <em>This is the trust singleton</em>.
+      </p>
+      <p>
+        Sightless changes that. A Data Owner encrypts data locally, transmits
+        the ciphertext to a remote Operator that evaluates a requested
+        function homomorphically <em>without decrypting it</em>, and receives
+        the encrypted result alongside a signed Sightless Receipt that any
+        third party can validate offline.
+      </p>
+      <p>
+        The Receipt cryptographically binds the Operator's claim about which
+        function ran on which inputs under which policy — providing
+        accountability that survives long after the session and is portable
+        across machines, time, and counterparties.
+      </p>
+    </div>
+
+    <div class="callout">
+      <span class="callout-tag">Analogy</span>
+      <p>
+        <strong
+          >Sightless is to private compute what HTTPS is to web encryption.</strong
+        >
+        HTTPS did not invent ciphers, public-key cryptography, or certificate hierarchies
+        — those existed long before TLS. What HTTPS standardized was the <em
+          >orchestration layer above them</em
+        >. Sightless plays the same role for FHE, TEE, MPC, ZK, and FE.
+      </p>
+    </div>
+  </div>
+</section>

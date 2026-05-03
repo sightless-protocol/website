@@ -1,0 +1,169 @@
+---
+const fields = [
+  { name: "protocol_version", value: "{ major: 0, minor: 1 }", cls: "" },
+  {
+    name: "operator_signing_key",
+    value: "ed25519:6f3a2b…c8d1 (32 bytes, base64url)",
+    cls: "hash",
+  },
+  { name: "request_id", value: "a4f1e9c2-7b3d-4f51-91e0-2e8a73c9b1d4", cls: "" },
+  { name: "request_nonce", value: "d7c4…a3b2 (16 bytes)", cls: "hash" },
+  { name: "client_timestamp_ms", value: "1735689600000", cls: "" },
+  { name: "operator_timestamp_ms", value: "1735689601247", cls: "" },
+  { name: "function_id", value: '"weighted-sum-u8/v1"', cls: "" },
+  { name: "model_id", value: '"logreg-creditrisk/v3"', cls: "" },
+  { name: "policy_id", value: "H(JCS(policy)) — 32B", cls: "hash" },
+  { name: "pk_fhe_hash", value: "H(safe_serialize(pk_fhe)) — 32B", cls: "hash" },
+  {
+    name: "input_ciphertext_hash",
+    value: "H(safe_serialize(Cx)) — 32B",
+    cls: "hash",
+  },
+  {
+    name: "output_ciphertext_hash",
+    value: "H(safe_serialize(Cy)) — 32B",
+    cls: "hash",
+  },
+];
+---
+
+<section id="receipt">
+  <div class="container">
+    <div class="section-num"><span>§ 03 — The Sightless Receipt</span></div>
+    <h2>
+      A signed envelope <em>portable</em> in time, space, and counterparty.
+    </h2>
+
+    <div class="receipt-split">
+      <div>
+        <p style="font-size: 19px; max-width: 56ch;">
+          The Receipt cryptographically binds the Operator to a tuple: <em
+            >which function ran, on which input, under which policy, producing
+            which output</em
+          >. Given only the Receipt and the Operator's public key — acquired
+          out-of-band — any Verifier can validate it offline, at any time,
+          without contacting the Operator that signed it.
+        </p>
+      </div>
+
+      <figure
+        class="figure"
+        data-label="Fig. 03 — Binding chain"
+        style="padding: 32px 28px 22px;"
+      >
+        <svg
+          viewBox="0 0 380 280"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="bindTitle"
+        >
+          <title id="bindTitle">What the Ed25519 signature covers.</title>
+          <rect
+            x="14"
+            y="14"
+            width="352"
+            height="252"
+            fill="none"
+            stroke="#b8341c"
+            stroke-width="1.5"></rect>
+          <text
+            x="28"
+            y="34"
+            font-family="JetBrains Mono, monospace"
+            font-size="10"
+            letter-spacing="2"
+            fill="#b8341c">SIGN_SK_OP( JCS( UNSIGNED ) )</text>
+
+          <rect
+            x="36"
+            y="52"
+            width="308"
+            height="196"
+            fill="#f4f1ea"
+            stroke="#1a1712"></rect>
+          <text
+            x="50"
+            y="72"
+            font-family="JetBrains Mono, monospace"
+            font-size="10"
+            letter-spacing="2"
+            fill="#5a5347">UNSIGNED RECEIPT</text>
+
+          <g
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#14110d"
+          >
+            <text x="50" y="96">protocol_version</text>
+            <text x="50" y="114">operator_signing_key</text>
+            <text x="50" y="132">request_id · nonce · ts</text>
+            <text x="50" y="150">function_id · model_id?</text>
+          </g>
+          <g
+            font-family="JetBrains Mono, monospace"
+            font-size="11"
+            fill="#8a6c2c"
+          >
+            <text x="50" y="174">policy_id          ← H(JCS(policy))</text>
+            <text x="50" y="192">pk_fhe_hash        ← H(safe_serialize)</text>
+            <text x="50" y="210">input_ciphertext_hash</text>
+            <text x="50" y="228">output_ciphertext_hash</text>
+          </g>
+
+          <g transform="translate(326 246) rotate(-12)">
+            <circle r="28" fill="#b8341c"></circle>
+            <circle r="22" fill="none" stroke="#f4f1ea" stroke-width="0.6"></circle>
+            <text
+              text-anchor="middle"
+              y="-2"
+              font-family="Newsreader, serif"
+              font-style="italic"
+              font-size="10"
+              fill="#f4f1ea">sightless</text>
+            <text
+              text-anchor="middle"
+              y="10"
+              font-family="JetBrains Mono, monospace"
+              font-size="8"
+              fill="#f4f1ea"
+              letter-spacing="1.5">v0.1</text>
+          </g>
+        </svg>
+        <div class="figure-caption">
+          Every field bound. <strong>One signature, one truth.</strong>
+        </div>
+      </figure>
+    </div>
+
+    <div class="receipt-frame">
+      <div class="seal">SIGHTLESS<br />v0.1<br />RECEIPT</div>
+
+      {
+        fields.map((f) => (
+          <div class="field">
+            <span class="field-name">{f.name}</span>
+            <span class={`field-value ${f.cls}`}>{f.value}</span>
+          </div>
+        ))
+      }
+
+      <div
+        class="field"
+        style="margin-top: 12px; padding-top: 14px; border-top: 1.5px solid var(--rule);"
+      >
+        <span class="field-name">signature</span>
+        <span class="field-value sig"
+          >Sign_sk_op( JCS(unsigned) ) — 64 bytes Ed25519</span
+        >
+      </div>
+    </div>
+
+    <p
+      style="margin-top: 32px; font-family: var(--mono); font-size: 13px; color: var(--ink-soft); max-width: 64ch;"
+    >
+      Every field above is bound by the signature. <code>JCS</code> (RFC 8785)
+      guarantees deterministic byte-for-byte reproducibility. <code>H_label</code
+      > (SHA-256 with domain separation) prevents cross-purpose hash confusion.
+    </p>
+  </div>
+</section>
